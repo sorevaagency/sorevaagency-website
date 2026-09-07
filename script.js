@@ -1,115 +1,84 @@
 document.addEventListener("DOMContentLoaded", () => {
-
-    /* Dynamic year */
     const year = document.getElementById("year");
 
     if (year) {
         year.textContent = new Date().getFullYear();
     }
 
-
-    /* Request form */
     const form = document.getElementById("contactForm");
 
     if (!form) {
         return;
     }
 
+    const successMessage = document.getElementById("successMessage");
 
-    /* Preselect budget based on package link */
-    const params = new URLSearchParams(window.location.search);
-    const packageChoice = params.get("paket");
-    const budget = document.getElementById("budget");
-
-    if (packageChoice && budget) {
-
-        if (packageChoice === "Essential") {
-            budget.value = "ab 500 €";
-        }
-
-        if (packageChoice === "Growth") {
-            budget.value = "ab 950 €";
-        }
-
-        if (packageChoice === "Premium") {
-            budget.value = "bis 1.500 €";
-        }
-    }
-
-
-    form.addEventListener("submit", (event) => {
-
+    form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        const data = new FormData(form);
+        const submitButton = form.querySelector('button[type="submit"]');
 
-        const name = data.get("name") || "";
-        const email = data.get("email") || "";
-        const firma = data.get("firma") || "";
-        const social = data.get("social") || "";
-        const budgetValue = data.get("budget") || "";
-        const ziel = data.get("ziel") || "";
-        const message = data.get("message") || "";
-
-
-        const subject =
-            `Projektanfrage von ${name}`;
-
-
-        const body =
-`Hallo SOREVA Agency,
-
-ich interessiere mich für eine Zusammenarbeit.
-
-Vor- und Nachname:
-${name}
-
-E-Mail:
-${email}
-
-Unternehmen / Brand:
-${firma}
-
-Instagram / TikTok / Website:
-${social}
-
-Budgetrahmen:
-${budgetValue}
-
-Was möchte ich erreichen?
-${ziel}
-
-Projektbeschreibung:
-${message}
-
-Viele Grüße
-${name}`;
-
-
-        const mailto =
-            "mailto:soreva.agency@gmx.de" +
-            "?subject=" +
-            encodeURIComponent(subject) +
-            "&body=" +
-            encodeURIComponent(body);
-
-
-        const messageBox =
-            document.getElementById("formMessage");
-
-
-        if (messageBox) {
-
-            messageBox.textContent =
-                "Deine Anfrage wird jetzt in deinem E-Mail-Programm vorbereitet.";
-
-            messageBox.classList.add("show");
+        if (successMessage) {
+            successMessage.classList.remove("show");
+            successMessage.textContent = "";
         }
 
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = "Wird gesendet …";
+        }
 
-        window.location.href =
-            mailto;
+        const formData = new FormData(form);
 
+        formData.append("_subject", "Neue Projektanfrage – SOREVA Agency");
+        formData.append("_replyto", formData.get("email") || "");
+        formData.append("_captcha", "true");
+
+        try {
+            const response = await fetch(
+                "https://formsubmit.co/ajax/soreva.agency@gmx.de",
+                {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        Accept: "application/json"
+                    }
+                }
+            );
+
+            const result = await response.json();
+
+            if (!response.ok || result.success === false) {
+                throw new Error(result.message || "Formular konnte nicht gesendet werden.");
+            }
+
+            form.reset();
+
+            if (successMessage) {
+                successMessage.textContent =
+                    "Vielen Dank! Deine Anfrage wurde erfolgreich gesendet.";
+                successMessage.classList.add("show");
+            }
+
+            window.scrollTo({
+                top: form.offsetTop - 120,
+                behavior: "smooth"
+            });
+
+        } catch (error) {
+            if (successMessage) {
+                successMessage.textContent =
+                    "Die Anfrage konnte gerade nicht gesendet werden. Bitte versuche es noch einmal.";
+                successMessage.classList.add("show");
+            }
+
+            console.error("SOREVA Formular:", error);
+
+        } finally {
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = "Anfrage senden";
+            }
+        }
     });
-
 });
