@@ -2496,3 +2496,128 @@ h3 {
 .brand-tagline {
     color: #b99b6a;
 }
+
+
+/* =========================
+   MOBILE NAVIGATION FIX
+========================= */
+
+@media (max-width: 560px) {
+    .navbar {
+        top: 10px;
+    }
+
+    .nav-shell,
+    .nav-inner {
+        width: calc(100% - 18px);
+        min-height: 58px;
+        padding: 6px 8px;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 8px;
+    }
+
+    .brand {
+        min-width: 0;
+        overflow: hidden;
+        gap: 8px;
+    }
+
+    .brand-logo {
+        width: 34px;
+        height: 34px;
+        flex: 0 0 auto;
+    }
+
+    .brand-copy {
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    .brand-name {
+        min-width: 0;
+        font-size: 12px;
+        letter-spacing: .04em;
+        line-height: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .brand-tagline {
+        max-width: 100%;
+        font-size: 5.5px;
+        letter-spacing: .08em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .nav-cta {
+        min-height: 36px;
+        padding: 8px 10px;
+        gap: 5px;
+        font-size: 10px;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    .nav-cta span {
+        font-size: 13px;
+    }
+}
+
+
+
+/* =========================
+   HERO LOGO / CTA MOBILE FIX
+========================= */
+
+.hero-logo-panel {
+    position: absolute;
+    right: clamp(30px, 7vw, 110px);
+    bottom: 34px;
+    width: min(230px, 26vw);
+    z-index: 3;
+}
+
+@media (max-width: 930px) {
+    .hero-logo-panel {
+        right: 24px;
+        bottom: 22px;
+        width: 190px;
+    }
+
+    .hero-image .hero-content {
+        position: relative;
+        z-index: 5;
+        max-width: 620px;
+        padding-bottom: 150px;
+    }
+}
+
+@media (max-width: 560px) {
+    .hero-image {
+        min-height: 760px;
+        padding-bottom: 250px;
+    }
+
+    .hero-image .hero-content {
+        padding-bottom: 0;
+    }
+
+    .hero-logo-panel {
+        right: 50%;
+        bottom: 26px;
+        transform: translateX(50%);
+        width: 155px;
+        z-index: 2;
+    }
+
+    .hero-buttons {
+        position: relative;
+        z-index: 10;
+    }
+
+    .hero-buttons .button {
+        position: relative;
+        z-index: 11;
+    }
+}
