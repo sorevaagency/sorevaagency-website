@@ -738,7 +738,7 @@ h3 {
 
 
 .intro-section {
-    padding-top: 55px;
+    padding-top: 78px;
     padding-bottom: 78px;
 
     border-top:
@@ -2619,4 +2619,8 @@ h3 {
         position: relative;
         z-index: 11;
     }
+}
+/* Intro-Inhalt etwas weiter nach oben */
+.intro-grid {
+    transform: translateY(-20px);
 }
